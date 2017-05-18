@@ -1,3 +1,16 @@
+/*
+ * 	과제 내용
+ * 	입력으로 들어오는 괄호들은 (,),{,},[,]이다. 괄호가 짝이 맞는 경우 1을 출력하고,
+	그렇지 않으면 괄호검사 알고리즘에 의하여 처음으로 발견된 (짝이 맞지 않은 괄호) 오류에 대하여, 다음 중 하나를 출력한다. (다음에서 xx와 yy는 양의 정수임)
+
+	)에 대응하는 (가 없을 경우 error 1: ) at position yy in line xx
+	}에 대응하는 {가 없을 경우 error 2: } at position yy in line xx
+	]에 대응하는 [가 없을 경우 error 3: ] at position yy in line xx
+	(에 대응하는 )가 없을 경우 error 4: ( at position yy in line xx
+	{에 대응하는 }가 없을 경우 error 5: { at position yy in line xx
+	[에 대응하는 ]가 없을 경우 error 6: ( at position yy in line xx
+ */
+
 #include <stdlib.h>
 #include <iostream>
 
