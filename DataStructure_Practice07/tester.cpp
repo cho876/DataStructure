@@ -1,3 +1,10 @@
+/*
+ * 과제 내용
+ *
+ *  스택을 연결구조(linked stack)로 구현하고,
+ *  	이를 이용하여 과제 4와 동일한  프로그램을 작성하시오.
+ */
+
 #include <stdlib.h>
 #include <iostream>
 
