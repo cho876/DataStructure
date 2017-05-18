@@ -1,8 +1,7 @@
 /*
- * third.cpp
+ *  과제 내용
  *
- *  Created on: 2017. 3. 17.
- *      Author: Cho
+ *  주택용(저압) 전력 사용한 월과 사용량과 이 주어질 때, 청구요금계를 구하는 프로그램을 작성
  */
 
 #include <iostream>
