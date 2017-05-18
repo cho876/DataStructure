@@ -1,13 +1,49 @@
+/*
+ *  과제 내용
+ *
+ *  서점의 도서 재고관리 프로그램을 작성하시오.
+
+	1) 재고 도서들 리스트는 연결구조로 구현
+  	  	  도서는 도서번호(string), 도서이름(공백이 없는 string), 가격(int), 수량(int) 정보를 가진다.
+	2) 명령어 종류는 다음과 같다.
+•  		N // 신규도서 입고
+   	   	   입력: 도서번호, 도서이름, 가격, 입고수량
+   	   	   입력 예: N 1111 DataStructures 20000 10
+   	   	   유의사항: 신규도서가 재고도서 목록에 있을 경우 “error: 1” 출력
+•  		R // 재고도서 목록에 있는 도서 입고
+   	   	   입력: 도서번호, 입고수량
+   	   	   입력 예: R 1111 3
+   	   	   유의사항: 도서번호의 도서가 재고도서 목록에 없을 경우 “error: 2” 출력
+•  		S // 재고도서 목록에 있는 도서를 판매함
+   	   	   입력: 도서번호 판매수량
+   	   	   입력 예: S 1111 2
+   	   	   유의사항: 입력되는 도서번호가 재고도서 목록에 없을 경우, “error: 2” 출력하고, 판매수량이 재고수량보다 많을 경우 “error: 3” 출력
+•  		D // 도서 폐기 (재고도서 목록에서 완전히 삭제함)
+   	   	   입력: 도서번호
+   	   	   입력 예: 1112
+   	   	   유의사항: 입력되는 도서번호가 재고도서 목록에 없을 경우  “error: 2” 출력
+•  		I // 도서의 재고 상태 조회
+   	   	   입력 : 도서번호
+   	   	   입력 예: 1111
+   	   	   출력 : 입력된 도서번호의 재고 상태(도서번호 이름 가격 재고수량)를 출력
+   	   	   ※ 재고 수량이 0인 경우도 출력함
+   	   	   출력 예
+   	   	   1111 DataStrctures 20000 11
+   	   	   유의사항: 입력되는 도서번호가 도서재고 목록에 없을 경우 “error: 2” 출력
+•  		P // 도서재고 목록에 있는 모든 도서의 재고상태(도서번호, 도서이름, 가격, 재고수량)를 도서번호 오름차순으로 출력
+   	   	   ※ 재고 수량이 0인 도서도 출력함
+ */
+
 #include <iostream>
 #include <string>
 using namespace std;
 
 struct Node
 {
-	int num;       // ���� ��ȣ
-	string name;   // ���� �̸�
-	int price;     // ����
-	int total;     // ����
+	int num;       // 도서 번호
+	string name;   // 도서 이름
+	int price;     // 가격
+	int total;     // 수량
 	Node* next;
 };
 
@@ -17,20 +53,20 @@ public:
    List();
    ~List();
    bool isEmpty() const;
-   bool error1(int);       // error1 ����
-   bool error2(int);       // error2 ����
-   bool error3(int, int);     // error3 ����
+   bool error1(int);       // error1 조건
+   bool error2(int);       // error2 조건
+   bool error3(int, int);     // error3 조건
    void insert(int, string, int, int);
-   void remove(int);          // ���� ���
-   void add(int, int);        // ������� ��Ͽ� �ִ� ���� �԰�
-   void sell(int, int);       // ���� �Ǹ�
-   void find(int);            // ���� ��� ���� ��ȸ
-   void print();              // ���� ���� ��� ���
-   void _print();             // �Ǹ� ���� ��� ���
+   void remove(int);          // 도서 폐기
+   void add(int, int);        // 재고도서 목록에 있는 도서 입고
+   void sell(int, int);       // 도서 판매
+   void find(int);            // 도서 재고 상태 조회
+   void print();              // 현재 도서 목록 출력
+   void _print();             // 판매 도서 목록 출력
 
 private:
-   Node* sellPtr;      // �ǸŸ���� ���� Node
-   Node* topPtr;       // �������� ���� Node
+   Node* sellPtr;      // 판매목록을 위한 Node
+   Node* topPtr;       // 재고목록을 위한 Node
    int length;
 };
 
@@ -44,10 +80,10 @@ List::~List(){
 	delete sellPtr;
 }
 
-bool List::error1(int num){  // error1 ����
+bool List::error1(int num){  // error1 조건
 	Node* comp = topPtr;
 	while(comp != NULL){
-		if(comp->num == num){  // �űԵ����� ������� ��Ͽ� ���� ���
+		if(comp->num == num){  // 신규도서가 재고도서 목록에 있을 경우
 			return true;
 		}
 		comp = comp->next;
@@ -55,23 +91,23 @@ bool List::error1(int num){  // error1 ����
 	return false;
 }
 
-bool List::error2(int num){  // error2 ����
+bool List::error2(int num){  // error2 조건
 	Node* pre = topPtr;
 	while(pre != NULL){
 		if(pre->num == num)
 			return false;
 		pre = pre->next;
 	}
-	// ������ȣ�� ������ ������� ��Ͽ� ���� ���
+	// 도서번호의 도서가 재고도서 목록에 없을 경우
 	cout<<"error: 2"<<endl;
 		return true;
 }
 
-bool List::error3(int num, int total){  // error3 ����
+bool List::error3(int num, int total){  // error3 조건
 	Node* comp = topPtr;
 	while(comp != NULL){
 		if(comp->num == num){
-			if(comp->total<total){  // �Ǹż����� ����������� ���� ���
+			if(comp->total<total){  // 판매수량이 재고수량보다 많을 경우
 				cout<<"error: 3"<<endl;
 				return true;
 			}
@@ -81,7 +117,7 @@ bool List::error3(int num, int total){  // error3 ����
 	return false;
 }
 
-// ������ȣ ���� ������������ ����
+// 도서번호 기준 오름차순으로 삽입
 void List::insert(int num, string name, int price, int total){
 	if(error1(num)){
 		cout<<"error: 1"<<endl;
@@ -121,13 +157,13 @@ void List::insert(int num, string name, int price, int total){
 	}
 }
 
-void List::add(int num, int total){  // ������� ��Ͽ� �ִ� ���� �԰�
+void List::add(int num, int total){  // 재고도서 목록에 있는 도서 입고
 	if(error2(num))
 		return;
 	else{
 		Node* comp = topPtr;
 		while(comp != NULL){
-			if(comp->num == num){   // ��Ͽ� ���� ��� �߰�
+			if(comp->num == num){   // 목록에 있을 경우 추가
 				comp->total += total;
 				return;
 			}
@@ -136,7 +172,7 @@ void List::add(int num, int total){  // ������� ��Ͽ� �ִ� ���� �԰�
 	}
 }
 
-void List::sell(int num, int total){    // ���� �Ǹ�
+void List::sell(int num, int total){    // 도서 판매
 	if(error2(num) || error3(num, total))
 		return;
 	else{
@@ -144,8 +180,8 @@ void List::sell(int num, int total){    // ���� �Ǹ�
 		Node* sel = new Node;
 		while(pre != NULL){
 			if(pre->num == num){
-				pre->total -= total;  // �Ǹ��� ��� �����Ͽ����� total ����
-				sel->num = pre->num;  // �ǸŸ�Ͽ��� ���� ���� �߰�
+				pre->total -= total;  // 판매할 경우 재고목록에서는 total 감소
+				sel->num = pre->num;  // 판매목록에는 도서 정보 추가
 				sel->name = pre->name;
 				sel->price = pre->price;
 				sel->total = total;
@@ -158,7 +194,7 @@ void List::sell(int num, int total){    // ���� �Ǹ�
 	}
 }
 
-void List::remove(int num){   // ���� ����
+void List::remove(int num){   // 도서 제거
 	if(error2(num))
 		return;
 	else{
@@ -179,7 +215,7 @@ void List::remove(int num){   // ���� ����
 		}
 }
 
-void List::find(int num){    // ���� ã��
+void List::find(int num){    // 도서 찾기
 	if(error2(num))
 		return;
 	else{
@@ -195,7 +231,7 @@ void List::find(int num){    // ���� ã��
 	}
 }
 
-void List::print(){   // ������ ���
+void List::print(){   // 재고목록 출력
 	Node* pre = topPtr;
 	while(pre != NULL){
 		cout<<pre->num<<" "<<pre->name<<" "<<pre->price
@@ -204,7 +240,7 @@ void List::print(){   // ������ ���
 	}
 }
 
-void List::_print(){  // �ǸŸ�� ���
+void List::_print(){  // 판매목록 출력
 	Node* pre = sellPtr;
 	Node* post = sellPtr->next;
 	while(pre != NULL){
@@ -227,7 +263,7 @@ using namespace std;
 int main()
 {
   List L;
-  char command;  // ���ɾ�
+  char command;  // 명령어
   int num;
   string name;
   int price;
@@ -239,35 +275,35 @@ int main()
      cin >> command;
      switch(command){
 
-     case 'N': // �űԵ��� �԰�
+     case 'N': // 신규도서 입고
     	 cin>>num>>name>>price>>total;
     	 L.insert(num, name, price, total);
     	 break;
 
-     case 'R': // ������� ��Ͽ� �ִ� ���� �԰�
+     case 'R': // 재고도서 목록에 있는 도서 입고
     	 cin >> num>>total;
     	 L.add(num, total);
     	  break;
 
-     case 'S': // ������� ��Ͽ� �ִ� ������ �Ǹ���
+     case 'S': // 재고도서 목록에 있는 도서를 판매함
     	 cin >> num>>total;
     	 L.sell(num, total);
     	  break;
-     case 'D': // ���� ���
+     case 'D': // 도서 폐기
     	 cin >> num;
     	 L.remove(num);
     	 break;
-     case 'I': // ������ ��� ���� ��ȸ
+     case 'I': // 도서의 재고 상태 조회
     	 cin >> num;
     	 L.find(num);
 		 break;
-     case 'P': // ������� ��Ͽ� �ִ� ��� ������ ������� ���
+     case 'P': // 도서재고 목록에 있는 모든 도서의 재고상태 출력
     	 L.print();
     	 break;
-     case 'L': // �Ǹ��� ��� ������ �Ǹ����� ���
+     case 'L': // 판매한 모든 도서의 판매정보 출력
     	 L._print();
     	 break;
-     case 'Q': // ����
+     case 'Q': // 종료
     	 return 0;
      }
   }
