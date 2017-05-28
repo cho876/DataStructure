@@ -16,12 +16,12 @@
 using namespace std;
 
 int main(){
-	Maze M;
-	Point source;
-	M.createMap();
-	cin>>source.row>>source.col;
-	M.pathExist(source);
-	cout<<M.getCount()<<endl;
+	Maze M;         // Map
+	Point source;   // 시작 점
+	M.createMap();   // Map 생성
+	cin>>source.row>>source.col;    // 시작 위치 지정
+	M.pathExist(source);           // 시작 위치부터 도달 가능 위치 갯수 Count
+	cout<<M.getCount()<<endl;     // 총 Count 갯수 출력
 	return 0;
 }
 
