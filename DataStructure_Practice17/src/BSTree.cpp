@@ -9,6 +9,7 @@
 
 BSTree::BSTree(){
 	root = NULL;
+	sell_root = NULL;
 }
 
 void destroy(Book*& tree){
@@ -19,8 +20,17 @@ void destroy(Book*& tree){
 	}
 }
 
+void destroy2(Book*& tree){
+	while(tree != NULL){
+		destroy(tree->leftChild);
+		destroy(tree->rightChild);
+		delete tree;
+	}
+}
+
 BSTree::~BSTree(){
 	destroy(root);
+	destroy2(root);
 }
 
 void insertRecur(Book*& tree, int num, string name, int price, int count){
@@ -32,12 +42,46 @@ void insertRecur(Book*& tree, int num, string name, int price, int count){
 		tree->count = count;
 	}else if(tree->num > num)
 		insertRecur(tree->leftChild, num, name, price, count);
-	else
+	else if(tree->num < num)
 		insertRecur(tree->rightChild, num, name, price, count);
+	else
+		cout<<"error: 1"<<endl;
 }
 
 void BSTree::insert(int num, string name, int price, int count){   // N (신규도서 입고)
 	insertRecur(root, num, name, price, count);
+}
+void plusRecur(Book*& tree, int num, int count){
+	if(tree == NULL)
+		cout<<"error: 2"<<endl;
+	else{
+		if(tree->num > num)
+			plusRecur(tree->leftChild, num, count);
+		else if(tree->num < num)
+			plusRecur(tree->rightChild, num, count);
+		else if(tree->num == num){
+			tree->count += count;
+		}
+	}
+}
+
+void insertSellRecur(Book*& tree, int num, string name, int price, int count){
+	if(tree == NULL){
+		tree = new Book();
+		tree->num = num;
+		tree->name = name;
+		tree->price = price;
+		tree->count = count;
+	}else if(tree->num > num)
+		insertSellRecur(tree->leftChild, num, name, price, count);
+	else if(tree->num < num)
+		insertSellRecur(tree->rightChild, num, name, price, count);
+	else
+		plusRecur(tree, num, count);
+}
+
+void BSTree::insertSell(int num, string name, int price, int count){   // N (신규도서 입고)
+	insertSellRecur(root, num, name, price, count);
 }
 
 void removeRecur(Book*& tree, int num){
@@ -72,53 +116,48 @@ void BSTree::remove(int num){                    // D (도서 폐기)
 	removeRecur(root, num);
 }
 
-void plusRecur(Book*& tree, int num, int count){
-	if(tree == NULL)
-		cout<<"error: 2"<<endl;
-	else{
-		if(tree->num > num)
-			plusRecur(tree->leftChild, num, count);
-		else if(tree->num < num)
-			plusRecur(tree->rightChild, num, count);
-		else if(tree->num == num)
-			tree->count += count;
-	}
-}
+
 
 void BSTree::plus(int num, int count){                // R (재고도서 목록에 있는 도서 입고)
 	plusRecur(root, num, count);
 }
 
-void sellRecur(Book*& tree, int num, int count){
-	if(tree == NULL)
+bool sellRecur(Book*& tree, int num, int count){
+	if(tree == NULL){
 		cout<<"error: 2"<<endl;
+		return false;
+	}
 	else{
 		if(tree->num > num)
-			plusRecur(tree->leftChild, num, count);
+			return sellRecur(tree->leftChild, num, count);
 		else if(tree->num < num)
-			plusRecur(tree->rightChild, num, count);
+			return sellRecur(tree->rightChild, num, count);
 		else if(tree->num == num){
-			if(tree->count < count)
+			if(tree->count < count){
 				cout<<"error: 3"<<endl;
+				return false;
+			}
 			else{
 				tree->count -= count;
+				return true;
 			}
 		}
 	}
+	return true;
 }
 
-void BSTree::sell(int num, int count){               // S (재고 도서 판매)
-	sellRecur(root, num, count);
+bool BSTree::sell(int num, int count){               // S (재고 도서 판매)
+	return sellRecur(root, num, count);
 }
 
 Book searchRecur(Book* tree, int num){
-	if(tree->num > num)
+	if(tree == NULL){}
+	else if(tree->num > num)
 		return searchRecur(tree->leftChild, num);
 	else if(tree->num < num)
 		return searchRecur(tree->rightChild, num);
-	else{
+	else
 		return *tree;
-	}
 }
 
 Book BSTree::search(int num){                 // I (도서 재고 상태 조회)
@@ -126,7 +165,8 @@ Book BSTree::search(int num){                 // I (도서 재고 상태 조회)
 }
 
 void printRecur(Book* tree){
-	while(tree != NULL){
+	if(tree == NULL){}
+	else{
 		printRecur(tree->leftChild);
 		cout<<tree->num<<" "<<tree->name<<" "<<tree->price<<" "<<tree->count<<endl;
 		printRecur(tree->rightChild);
@@ -135,4 +175,8 @@ void printRecur(Book* tree){
 
 void BSTree::print(){                    // P (도서 재고상태 오름차순 출력)
 	printRecur(root);
+}
+
+void BSTree::print_sell(){
+
 }
