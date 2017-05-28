@@ -13,19 +13,19 @@
 
 using namespace std;
 
-struct Book{
-	int num;
-	string name;
-	int price;
-	int count;
+struct Book{   //도서 정보
+	int num;           // 도서 번호
+	string name;       // 도서 이름
+	int price;         // 도서 가격
+	int count;         // 도서 수량
 	Book* leftChild;
-	Book* rightChild;
+	Book* rightChild;     // 좌우 Child
 };
 
 class BSTree{
 public:
-	BSTree();
-	~BSTree();
+	BSTree();      // 생성자
+	~BSTree();     // 소멸자
 	void insert(int, string, int, int);   // N (신규도서 입고)
 	void insertSell(int, string, int, int);   // 판매도서 이진트리에 삽입
 	void remove(int);                    // D (도서 폐기)
@@ -33,10 +33,8 @@ public:
 	bool sell(int, int);               // S (재고 도서 판매)
 	Book search(int);                 // I (도서 재고 상태 조회)
 	void print();                    // P (도서 재고상태 오름차순 출력)
-	void print_sell();              // L (도서 판매목록 오름차순 출력)
 private:
-	Book* root;
-	Book* sell_root;
+	Book* root;            // root
 };
 
 #endif /* BSTREE_H_ */
