@@ -9,6 +9,7 @@
 #define MAZE_H_
 
 #include <iostream>
+
 using namespace std;
 
 class Point

@@ -27,6 +27,9 @@ void Maze::createMap(){        // Map 생성 함수
 }
 
 bool Maze::pathExist(Point source){      // 시작 점이 유효한 지 여부 확인 함수
+	if(source.row > m-1 || source.col > n-1 || source.row<0 || source.col<0)       // 맵의 범위를 벗어나는 곳을 목적지로 할 경우
+		return false;
+
 	for(int row=0; row<m; row++)
 		for(int col=0; col<n; col++)
 			visited[row][col] = false;    // 왔던 길을 체크하는 visited 배열의 모든 원소 false로 지정
@@ -82,3 +85,5 @@ bool Maze::pathExistRecur(Point currentPosition){     // 재귀를 통한 길 찾기 함�
 }
 
 int Maze::getCount(){return count;}      // 총 도달 가능 점 count 반환 함수
+
+
