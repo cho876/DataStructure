@@ -12,7 +12,7 @@ BSTree::BSTree(){   // 생성자
 }
 
 void destroy(Student*& tree){       // 재귀함수 (소멸)
-	while(tree != NULL){                // 모든 root가 제거되기 전까지
+	if(tree != NULL){                // 모든 root가 제거되기 전까지
 		destroy(tree->leftChild);           // 왼쪽 root 제거
 		destroy(tree->rightChild);          // 오른쪽 root 제거
 		delete tree;                        // 가운데 root 제거     (LRV - postorder)
@@ -98,3 +98,5 @@ int sizeRecur(Student* tree){    // 재귀함수 (크기 반환)
 int BSTree::size() const{    // 총 Node 수 반환 함수
 	return sizeRecur(root);    // 재귀함수(크기 반환)
 }
+
+

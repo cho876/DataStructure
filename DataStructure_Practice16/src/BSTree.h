@@ -7,7 +7,6 @@
 
 #ifndef BSTREE_H_
 #define BSTREE_H_
-
 #include <iostream>
 #include <string>
 
@@ -31,5 +30,6 @@ public:
 private:
 	Student* root;        // root 저장 변수
 };
+
 
 #endif /* BSTREE_H_ */
