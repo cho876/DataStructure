@@ -46,15 +46,14 @@
 
 #include "BSTree.h"
 
-
 int main(){
 	BSTree L;           // 재고목록 Binary Tree
 	BSTree SL;          // 판매목록 Binary Tree
 	Book B;             // 재고 책 정보 Structure
 	Book SB;            // 판매 책 정보 Structure
-
-	string command;
-	int num, price, count;
+	bool found = false;
+	string command, num;
+	int price, count;
 	string name;
 
 	while(1){
@@ -69,7 +68,7 @@ int main(){
 		}else if(command == "S"){           // S (재고도서 목록에 있는 도서 판매)
 			cin>>num>>count;
 			if(L.sell(num, count)){
-				SB = L.search(num);
+				SB = L.search(num, found);
 				SL.insertSell(SB.num, SB.name, SB.price, count);
 			}
 		}
@@ -78,8 +77,9 @@ int main(){
 			L.remove(num);
 		}else if(command == "I"){          // I (도서 재고 상태 조회)
 			cin>>num;
-			B = L.search(num);
-			cout<<B.num<<" "<<B.name<<" "<<B.price<<" "<<B.count<<endl;
+			B = L.search(num, found);
+			if(found)
+				cout<<B.num<<" "<<B.name<<" "<<B.price<<" "<<B.count<<endl;
 		}else if(command == "P"){          // P (도서재고 목록에 있는 도서 상태 오름차순 출력)
 			L.print();
 		}else if(command == "L"){          // L (판매 목록 오름차순 출력)
