@@ -9,6 +9,17 @@
 
 using namespace std;
 
+int GCD(int n1, int n2){         // GCD Recursive Algorithms
+	if(n1 < n2)
+		GCD(n2, n1);
+	else{
+		int result = n1 % n2;
+		if(result == 0)
+			return n2;
+		else
+			return GCD(n2, result);
+	}
+}
 
 int Factorial(int n){            // Factorial Recursiva Algorithms
 	if(n == 1)
@@ -47,6 +58,10 @@ void Hanoii(int n, char from, char temp, char to){     // Hanoii Recursive Algor
 }
 
 int main(){
+	int num1, num2;
+	cin>>num1>>num2;
+	cout<<"GCD's value: "<<GCD(num1, num2)<<endl;
+
 	int fac;
 	cin>>fac;
 	cout<<"Factorial's value: "<<Factorial(fac)<<endl;
